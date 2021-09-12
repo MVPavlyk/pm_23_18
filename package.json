@@ -1,0 +1,18 @@
+{
+  "name": "fls-gulp",
+  "version": "1.0.0",
+  "description": "Перший gulp",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MVPavlyk/pm_23_18.git"
+  },
+  "author": "Mykola Pavlyk",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
