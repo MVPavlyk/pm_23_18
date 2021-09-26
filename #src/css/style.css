@@ -364,6 +364,13 @@ a {
 	border-radius: 1px;
 	box-shadow: 0px 0px 5px 2px #d3d3d3;
 }
+.create{
+  z-index: 10000;
+  position: relative;
+  left: 250px;
+  top: -8px;
+  cursor: pointer;
+}
 
 .lbd_header {
 	height: 46px;
