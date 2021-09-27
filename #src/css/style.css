@@ -201,16 +201,22 @@ a {
 /* Annoncement */
 
 .ann {
-	width: 645px;
+	width: 845px;
 	height: 100%;
 	border-radius: 1px;
 	box-shadow: 0px 0px 5px 2px #d3d3d3;
+  transition: 0.3s linear;
+
 	/*display: flex;
 	flex-direction: column;*/;
 }
 
+.ann.active{
+  width: 645px;
+}
+
 .ann_header {
-	width: 645px;
+	width: 100%;
 	height: 62px;
 	box-shadow: 0px 0px 5px 1px #d3d3d3;
 	display: flex;
@@ -273,11 +279,25 @@ a {
 .ann_content {
 	height: 228px;
 	width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
+.ann_content::-webkit-scrollbar {
+  width: 5px;
+
+}
+
+.ann_content::-webkit-scrollbar-thumb {
+  border-radius: 1px;
+  background-color: #dadada;
+  height: 110px;
+}
+
 
 .ann_c_princ, .ann_c_teacher {
 	height: 60px;
-	width: 641px;
+	width: 100%;
 	border-bottom: 1px solid #e0e0e0;
 	display: flex;
 }
@@ -355,21 +375,44 @@ a {
 .left_b_divs {
 	display: flex;
 	justify-content: space-between;
-	width: 645px;
+	width: 845px;
+  transition: 0.3s linear;
 }
+.left_b_divs.active{
+  width: 645px;
+}
+
 
 .messages, .courses {
 	height: 100%;
-	width: 310px;
+	width: 360px;
 	border-radius: 1px;
 	box-shadow: 0px 0px 5px 2px #d3d3d3;
+  transition: 0.3s linear;
 }
+.messages.active, .courses.active{
+  width: 310px;
+}
+
+
 .create{
   z-index: 10000;
   position: relative;
   left: 250px;
   top: -8px;
   cursor: pointer;
+}
+
+.mes_ava{
+  padding: 0;
+}
+
+
+.online, .offline{
+  z-index: 100;
+  position: relative;
+  top: -30px;
+  left: 12px;
 }
 
 .lbd_header {
@@ -404,7 +447,7 @@ a {
 .mes_cont {
 	width: calc(100% - 13px);
 	height: 49px;
-	padding: 10px 0 0 10px;
+	padding: 10px 0 0 0px;
 	transition: .1s linear;
 }
 
