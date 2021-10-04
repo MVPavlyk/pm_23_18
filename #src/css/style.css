@@ -23,7 +23,7 @@ a {
 	box-shadow: 0px 65px 5px 5px #d3d3d3;
 	flex-direction: column;
 	align-items: center;
-	margin-left: -225px;
+	margin-left: -230px;
 	transition: margin-left 0.3s linear;
 }
 
@@ -98,6 +98,9 @@ a {
 	display: flex;
 	align-items: center;
 }
+.nav_point.active {
+	align-items: center;
+}
 
 .nav_point:hover {
 	background-color: #0288d1;
@@ -121,10 +124,7 @@ a {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-top: 100px;
-	/*position: absolute;
-	bottom: 0;
-	left: 0;*/;
+	margin-top: 200px;
 }
 
 .n_foot_pic {
@@ -134,9 +134,7 @@ a {
 /*  ____MAIN____  */
 
 .main {
-	/*flex: 1;
-	float: right;
-	width: 100%-245px;*/
+
 }
 
 /* Header */
@@ -177,7 +175,6 @@ a {
 
 /* Main content */
 .main_content {
-	/*width: calc(100% - 55px);*/
 	height: 620px;
 	margin: 22px 25px 0px 30px;
 	padding-left: 30px;
