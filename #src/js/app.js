@@ -1,5 +1,5 @@
 $(document).ready(function (){
 	$('.burger_menu').click(function(event){
-		$('.nav, .ann, .left_b_divs, .messages, .courses, .nav_text, .nav_point').toggleClass('active');
+		$('.nav, .ann, .left_b_divs, .messages, .courses, .main_nav, .nav_text, .nav_point, .nav_footer, .user_name, .location, .location_text, .activity, .user, .user_ava').toggleClass('active');
 	});
 });
