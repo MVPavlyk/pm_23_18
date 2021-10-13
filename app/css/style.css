@@ -442,6 +442,13 @@ a {
 	margin-bottom: 30px;
 }
 
+.cal_create{
+	position: relative;
+	top: -24px;
+	left: 230px;
+	z-index: 1000;
+}
+
 .month_header{
 	width: 100%;
 	height: 50px;
@@ -696,13 +703,60 @@ a {
 /* RBD */
 /*----------------------------------------------*/
 
-.right_b_divs {
+.right_b_divs{
+	padding: 0;
+	display: flex;
+	justify-content: space-between;
 	width: 310px;
+}
+
+.dots{
+	width: calc(100% - 272px);
+	height: 100%;
+}
+
+.line{
+	position: relative;
+	z-index: 0;
+	margin: 30px 15px;
+}
+.elipse {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+
+	position: relative;
+
+}
+.e1{
+	background-color: #03a9f4;
+	top: -272px;
+	left: 10.5px;
+}
+
+.e2{
+	background-color: #ffc107;
+	top: -192px;
+	left: 10.5px;
+}
+
+.e3	{
+	background-color: #26c6da;
+	top: -62px;
+	left: 10.5px;
+}
+
+
+
+
+.rbd_divs_blocks {
+	width: 270px;
 	height: 300px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: flex-end;
+	margin: 0;
 }
 
 .rbd_top, .rbd_bottom {
@@ -894,14 +948,24 @@ a {
 	.messages.active, .courses.active, .calendar.active, .right_b_divs.active{
 		width: 315px;
 	}
+
+	.messages, .courses, .calendar, .right_b_divs{
+		width: 385px;
+	}
 	.create{
 		left: 260px;
 	}
 
-	.calendar.active{
-
+	/*.calendar, .right_b_divs{
+		width: 360px;
+	}*/
+	.rbd_divs_blocks{
+		height: 290px;
+		width: 300px;
 	}
-
+	.dots{
+		padding-left: 20px;
+	}
 
 }
 
