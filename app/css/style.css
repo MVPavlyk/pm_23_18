@@ -3,6 +3,7 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-weight: 400;
 	background-color: #fafafa;
+
 }
 
 a {
@@ -242,7 +243,7 @@ a {
 
 /* Main content */
 .main_content {
-	height: 620px;
+	/*height: 620px;*/
 	margin: 22px 25px 0px 30px;
 	padding-left: 30px;
 	display: flex;
@@ -482,22 +483,14 @@ a {
 
 .date-picker.selected {
 	font-weight: bold;
-	outline: 1px dashed #00BCD4;
+	outline: 1px dashed #03a9f4;
 }
 
 .date-picker.selected span {
 	border-bottom: 2px solid currentColor;
 }
 
-/* sunday */
-.date-picker:nth-child(1) {
-	color: red;
-}
 
-/* friday */
-.date-picker:nth-child(6) {
-	color: green;
-}
 
 #monthAndYear {
 	text-align: center;
@@ -514,17 +507,23 @@ a {
 	overflow: hidden;
 	clear: both;
 }
+#previous, #next{
+	width: 25px;
+	height: 25px;
+	background-color: #03a9f4;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 #previous {
 	float: left;
-	width: 25px;
-	height: 25px;
+
 }
 
 #next {
 	float: right;
-	width: 25px;
-	height: 25px;
+
 }
 
 .footer-container-calendar {
@@ -1069,6 +1068,62 @@ a {
 	.dots{
 		padding-left: 20px;
 	}
+	.main{
+		height: 1050px;
+	}
+
+	.right_content{
+		height: 300px;
+	}
 
 }
+@media(max-width: 910px){
+	.right_content{
+		flex-direction: column;
+		align-items: center;
+		height: auto;
+	}
+	.left_b_divs{
+		flex-direction: column;
+		height: auto;
+		align-items: center;
+	}
+	.left_content{
+		height: auto;
+		align-items: center;
+	}
+	.courses{
+		margin-top: 30px;
+	}
 
+	.ann{
+		width: 385px;
+	}
+	.ann.active{
+		width: 315px;
+	}
+	.ann_c_text{
+		padding: 3px;
+		overflow: hidden;
+	}
+	.ann_h_right{
+		width: 140px;
+	}
+	.ann_c_text p{
+		height: 20px;
+		overflow: hidden;
+	}
+	.nav{
+		height: 1700px;
+	}
+	.nav_footer{
+		margin-top: 1200px;
+	}
+	html{
+		overflow-x: hidden;
+	}
+	/*body{
+		display: flex;
+		flex-direction: column;
+	}*/
+}

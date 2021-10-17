@@ -1,70 +1,195 @@
-function simpleTask() {
-	console.log('This is test task!');
+// ...............................................................................................
+// Створення необхідних змінних ..................................................................
+
+// Відображати допоміжну інформацію
+const log = true;
+
+// Вибір препроцесора для css - sass, less або scss
+const use_preprocessor = "scss";
+
+// Залежно від вибраного препроцесора css використовуємо відповідний модуль
+// gulp-sass - для sass та scss
+// gulp-less - для less
+const css_preprocessor = (use_preprocessor === "less" ? "less" : "sass");
+
+// ...............................................................................................
+// Підключення модулів ...........................................................................
+
+// Підключаємо gulp
+const { src, dest, watch, parallel, series } = require("gulp");
+
+// Підключаємо gulpif - перевірка умов у .pipe()
+const gulp_if = require("gulp-if");
+
+// Підключаємо browser-sync - локальний сервер для тестування
+const browser_sync = require("browser-sync").create();
+
+// Підключаємо gh-pages - публікація сайту на github
+const gh_pages = require("gh-pages");
+
+// Підключаємо gulp-htmlmin - модуль стисненя html
+const html_min = require("gulp-htmlmin");
+
+// Підключаємо gulp-clean-css - модуль стисненя css
+const clean_css = require("gulp-clean-css");
+
+// Підключаємо css препроцесори
+const sass = require("gulp-sass");
+const less = require("gulp-less");
+
+// Підключаємо gulp-terser - модуль стисненя js
+const terser = require("gulp-terser");
+
+// Підключаємо gulp-imagemin - модуль стиснення зображень
+const image_min = require("gulp-imagemin");
+
+// Підключаємо gulp-newer - модуль для фільтрування змінених файлів
+const newer = require("gulp-newer");
+
+// Підключаємо gulp-debug - виведення допоміжної інформації
+const debug = require("gulp-debug");
+
+// Підключаємо del - модуль видалення файлів
+const del = require("del");
+
+// ...............................................................................................
+// Налаштування модулів ..........................................................................
+
+// Налаштування для модуля gulp-debug
+const opt = { title: "log", showCount: false };
+
+// Налаштування для модуля gulp-clean-css
+const css_opt = { level: { 1: { specialComments: 0 } } };
+
+// Функція обробки результату публікації сайту на GitHub
+const deploy_result = function (err) {
+                          if (err) { console.log(`Deploy Error: ${err}`); }
+                      };
+
+// ...............................................................................................
+
+// Запускаємо локальний сервер 
+function browserSync() {
+    browser_sync.init({                // Ініціалізація browser_sync
+        server: { baseDir: "build/" }, // Встановлюємо базову директорію
+        notify: false,                 // Вимикаємо інформаційні сповіщення
+        online: true                   /* Дозволяємо підключення пристроїв через 
+                                          локальну мережу (напр. смартфонів, планшетів і т.д.) */
+    })
 }
-exports.default = simpleTask
 
-const { src, dest, watch, series} = require ("gulp");
-const concat = require ("gulp-concat");
-const sass = require ("gulp-sass");
-const autoprefixer = require ("gulp-autoprefixer");
-const cssnano = require ("gulp-cssnano");
-const rename = require ("gulp-rename");
-const uglify = require ("gulp-uglify");
-const imagemin = require ("gulp-imagemin");
-//копіювання HTML файлів в папку dist
-function task_html() {
-	return src ("app/*.html")
-	.pipe(dest("dist"));
+// Обробляємо html файли
+function html() {
+    return src("app/**/*.html")            // Беремо файли з розширенням html із папки app/ та усіх підпапок
+          .pipe(newer("build/"))           // Відфільтровуємо лише змінені файли
+          .pipe(html_min                   // Стискаємо готові html файли
+              ({ collapseWhitespace: true,
+                 removeComments: true }))
+          .pipe(gulp_if(log, debug(opt)))  // Відображаємо список оброблюваних файлів
+          .pipe(dest("build/"));           // Переміщуємо у папку build/ 
 }
-exports.html = task_html
 
-//об'єднання, компіляція Sass в CSS, додавання префіксів і подальша мінімізація коду
-function task_sass () {
-	return src ( "app/sass/*.sass")
-	.pipe (concat ( 'styles.sass'))
-	.pipe (sass ())
-	.pipe (autoprefixer ({
-	browsers: [ 'last 2 versions'],
-	cascade: false
-	}))
-	.pipe (cssnano ())
-	.pipe (rename ({suffix: '.min'}))
-	.pipe (dest ( "build/css"));
-   }
-   exports.sass = task_sass
+// Обробляємо css файли
+function css() {
+    return src("app/css/*.css",           // Беремо файли з розширенням css із папки app/css/
+               { base: "app" })           // Задаємо параметр base, щоб зберегти вложеність файлів
+          .pipe(newer("build/"))          // Відфільтровуємо лише змінені файли
+          .pipe(gulp_if(log, debug(opt))) // Відображаємо список оброблюваних файлів
+          .pipe(clean_css(css_opt))       // Стискаємо готові css файли
+          .pipe(dest("build/"))           // Переміщуємо у папку build/
+          .pipe(browser_sync.stream());   // Оновлюємо стилі без перезавантаження сторінки
+}
 
-   //об'єднання і стиснення JS-файлів
-function task_scripts () {
-	return src ( "app/js/*.js") //вихідна директорія файлів
-	.pipe (concat ( 'scripts.js')) // конкатенація js-файлів в один
-	.pipe (uglify ()) //стиснення коду
-	.pipe (rename ({suffix: '.min'})) //перейменування файлу з приставкою .min
-	.pipe (dest ("dist/js")); // директорія продакшена
-   }
-   exports.scripts = task_scripts
+// Обробляємо sass, less або scss файли
+function preprocessCss() {
+    return src(`app/${use_preprocessor}` + // Беремо файли заданого препроцесора css із відповідної папки
+               `/*.${use_preprocessor}`)  
+          .pipe(gulp_if(log, debug(opt)))  // Відображаємо список оброблюваних файлів
+          .pipe(eval(css_preprocessor)())  // Компілюємо формат препросесора у css
+          .pipe(clean_css(css_opt))        // Стискаємо готові css файли
+          .pipe(dest("build/css/"))        // Переміщуємо у папку build/css/
+          .pipe(browser_sync.stream());    // Оновлюємо стилі без перезавантаження сторінки
+}
 
+// Обробляємо js файли
+function js() {
+    return src("app/js/*.js",             // Беремо файли з розширенням js із папки app/js/
+               { base: "app" })           // Задаємо параметр base, щоб зберегти вложеність файлів
+          .pipe(newer("build/"))          // Відфільтровуємо лише змінені файли
+          .pipe(terser())                 // Стискаємо готові js файли
+          .pipe(gulp_if(log, debug(opt))) // Відображаємо список оброблюваних файлів
+          .pipe(dest("build/"));          // Переміщуємо у папку build/
+}
 
-   //cтискання зображень
-function task_imgs() {
-	return src ( "app/img/*.+(jpg|jpeg|png|gif)")
-	.pipe (imagemin ({
-	progressive: true,
-	svgoPlugins: [{removeViewBox: false}],
-	interlaced: true
-	}))
-	.pipe (dest ("dist/images"))
-   }
-   exports.imgs = task_imgs
+// Обробляємо txt файли
+function txt() {
+    return src("app/data/**/*.txt",       // Беремо файли з розширенням txt із папки app/data/
+               { base: "app" })           // Задаємо параметр base, щоб зберегти вложеність файлів
+          .pipe(newer("build/"))          // Відфільтровуємо лише змінені файли
+          .pipe(gulp_if(log, debug(opt))) // Відображаємо список оброблюваних файлів
+          .pipe(dest("build/"));          // Переміщуємо у папку build/
+}
 
-   //відстежування за змінами у файлах
-   function task_watch() {
-	watch ("app/*.html", task_html);
-	watch ("app/js/*.js", task_scripts);
-	watch ("app/sass/*.sass", task_sass);
-	watch ("app/images/*.+(jpg|jpeg|png|gif)", task_imgs);
-   }
-   exports.watch = task_watch
+// Обробляємо файли зображень
+function img() {
+    return src(["app/img/**/*.{png,jpg,jpeg,gif}",
+                "app/data/**/*.{png,jpg,jpeg,gif}"], // Беремо файли з розширеннями png, jpg, jpeg, gif
+               { base: "app" })                      // Задаємо параметр base, щоб зберегти вложеність файлів
+          .pipe(newer("build/"))                     // Відфільтровуємо лише змінені файли
+          .pipe(image_min({ verbose: log,
+                            silent: !log }))         // Стискаємо зображення
+          .pipe(dest("build/"));                     // Переміщуємо у папку build/
+}
 
-   //Запуск тасків за замовчуванням
-   exports.build = series(task_html, task_sass, task_scripts, task_imgs, task_watch)
-   
+// Очищуємо папку зібраного проекту
+function cleanBuild() {
+    return del("build/**/*", { force: true });    // Очищуємо папку перед збиранням проекту
+}
+
+// Обробляємо зміни файлів
+function watchForFiles() {
+
+    // Слідкуємо за змінами html файлів
+    watch("app/**/*.html")
+   .on("all", series(html, browser_sync.reload));
+
+    // Слідкуємо за змінами css файлів
+    watch("app/css/*.css")
+   .on("all", series(css));
+
+    // Слідкуємо за змінами файлів препроцесора css - sass, less або scss
+    watch(`app/${use_preprocessor}/*.${use_preprocessor}`)
+   .on("all", series(preprocessCss));
+
+    // Слідкуємо за змінами js файлів
+    watch("app/js/*.js")
+   .on("all", series(js, browser_sync.reload));
+
+    // Слідкуємо за змінами txt файлів
+    watch("app/data/**/*.txt")
+   .on("all", series(txt, browser_sync.reload));
+
+    // Слідкуємо за змінами файлів зображень
+    watch("app/img/**/*")
+   .on("all", series(img, browser_sync.reload));
+
+}
+
+// Публікуємо зібраний сайт на github
+function deployOnGitHub() {
+    return gh_pages
+          .publish("build",                              // Папка, вміст якої заливається на github
+                   { message: "Auto-generated commit" }, // Текст коміту
+                   deploy_result);                       // Обробка можливих помилок
+}
+
+// ...............................................................................................
+
+// Збирання проекту
+exports.build = series(cleanBuild, html, css, preprocessCss, js, txt, img);
+
+// Завдання за замовчуванням
+exports.default = parallel(series(exports.build, browserSync), watchForFiles);
+
+// Збирання проекту та публікація його на github
+exports.deploy = series(exports.build, deployOnGitHub);
