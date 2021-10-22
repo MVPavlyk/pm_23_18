@@ -482,12 +482,12 @@ a {
 }
 
 .date-picker.selected {
-	font-weight: bold;
-	outline: 1px dashed #03a9f4;
+	border-radius: 50%;
+	border: 1px solid #727272;
 }
 
 .date-picker.selected span {
-	border-bottom: 2px solid currentColor;
+
 }
 
 
@@ -1126,4 +1126,24 @@ a {
 		display: flex;
 		flex-direction: column;
 	}*/
+}
+@media(max-width: 590px){
+	.nav{
+		width: 100%;
+		height: 200px;
+		position: relative;
+		box-shadow: none;
+		flex-direction: row;
+		justify-content: space-between;
+		display: none;
+	}
+	.user{
+		width: 100px;
+	}
+	.main_nav{
+		width: 100px;
+	}
+	.nav_point{
+		width: 50px;
+	}
 }
