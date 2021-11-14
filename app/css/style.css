@@ -377,18 +377,18 @@ a {
 }
 
 
-.ann_c_princ, .ann_c_teacher {
+.ann_c {
     height: 60px;
     width: 100%;
     border-bottom: 1px solid #e0e0e0;
     display: flex;
 }
 
-.ann_c_princ {
+.princ {
     border-left: 4px solid #03a9f4;
 }
 
-.ann_c_teacher {
+.teacher {
     border-left: 4px solid #ffc107;
 }
 

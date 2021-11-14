@@ -4,6 +4,25 @@ $(document).ready(function (){
 	});
 });
 
+$(document).ready(function(){
+	$.getJSON("data_ann.json", function (data){
+		var data_v = '';
+		$.each(data, function (key, value){
+			data_v += '<div class="ann_c '+value.pearson+'">';
+			data_v += '<div class="views">';
+			data_v += '<h3>'+value.views+'</h3>';
+			data_v += '<img src="img/view.png" alt="view">';
+			data_v += '</div>';
+			data_v += '<div class="ann_c_text">';
+			data_v += '<h2>'+value.t_text+'</h2>';
+			data_v += '<p>'+value.b_text+'</p>';
+			data_v += '</div>';
+			data_v += '</div>';
+		});
+		$('#ann_content').append(data_v);
+	});
+});
+
 function generate_year_range(start, end) {
 	var years = "";
 	for (var year = start; year <= end; year++) {
